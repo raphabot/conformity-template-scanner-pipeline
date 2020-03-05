@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "scan.js cloudformation.template.json"
+    "test": "node scan.js cloudformation.template.json"
   },
   "repository": {
     "type": "git",
