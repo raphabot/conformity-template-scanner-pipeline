@@ -25,15 +25,18 @@ const acceptedQty = process.env. acceptedQty;
 
 scan(region, apikey)
   .then(res => {
-    console.log(JSON.stringify(res, null, 2));
+    //console.log(JSON.stringify(res, null, 2));
     console.log("Failures Quantity: ", res.length);
+    console.log("Quantity of failures allowed: ", acceptedQty);
     return failOnFailure(res, acceptedQty);
   })
   .then(res => {
     console.log(res);
     if (res){
+      console.log("Too much failues!");
       process.exit(1);
     }
+    console.log("Less failures than allowed, so let's deploy it!");
     process.exit(0);
   })
   .catch(err => {
