@@ -6,4 +6,5 @@ install:
   - npm install
 
 deploy:
-  - echo "Deploy!"
+  provider: script
+  script: bash deploy.sh
