@@ -9,7 +9,7 @@ inputs:
     required: true
     default: us-west-2
   acceptedQty:
-    description: "Severity trigger (Options: LOW | MEDIUM | HIGH | VERY_HIGH | EXTREME), eg LOW"
+    description: "Severity trigger"
     required: false
     default: LOW
   template:
@@ -19,6 +19,5 @@ branding:
   icon: "check"
   color: "red"
 runs:
-  using: 'node12'
-  pre: "npm.sh"
-  main: "scan.js"
+  using: 'docker'
+  image: 'Dockerfile'
