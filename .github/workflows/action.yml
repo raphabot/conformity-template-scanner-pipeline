@@ -17,7 +17,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install -g cloud-conformity
+    - run: npm version
+    - run: npm install
+    - run: npm test
     - name: Cloud One Conformity Pipeline Scanner
       uses: raphabot/conformity-template-scanner-pipeline@v1
       with:
