@@ -19,5 +19,6 @@ branding:
   icon: "check"
   color: "red"
 runs:
-  using: "node12"
+  using: 'node12'
+  pre: "npm.sh"
   main: "scan.js"
