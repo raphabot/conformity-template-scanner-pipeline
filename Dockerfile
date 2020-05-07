@@ -1,10 +1,12 @@
 FROM node:latest
 
-RUN apt-get update -y
+RUN apt-get update && apt-get upgrade -y &&rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/raphabot/conformity-template-scanner-pipeline.git
+ADD . /usr/src/app
 
-RUN npm init -y
+WORKDIR /usr/src/app
 
 RUN npm install
+
+ENTRYPOINT [ "node", "scan.js" ]
 
