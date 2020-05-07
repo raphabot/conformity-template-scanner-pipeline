@@ -9,6 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - run: apt install nodejs
+    - run: apt install npm
+    - run: apt update -y
     - run: nvm install 12
     - run: npm version
     - run: npm install
