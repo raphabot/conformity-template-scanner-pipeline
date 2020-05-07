@@ -1,17 +1,26 @@
 name: "Cloud One Conformity Pipeline Scanner"
 description: "Scan CloudFormation files with Cloud One Conformity."
 inputs:
-  CC_API_KEY:
+  apikey:
     description: "Cloud One Conformity API Key"
+    required: true
+  region:
+    description: "Region of your Cloud One Conformity console, eg us-west-2."
+    required: true
+  acceptedQty:
+    description: "Severity trigger (Options: LOW | MEDIUM | HIGH | VERY_HIGH | EXTREME), eg LOW"
+    required: true
+  template:
+    description: "Location of the file to be scanned, eg template.yml."
     required: true
 branding:
   icon: "check"
   color: "red"
 runs:
-  using: "nodejs"
+  using: "node12"
   main: "scan.js"
   env:
-    CC_API_KEY: ${{ inputs.CC_API_KEY }}
-    CFN_TEMPLATE_FILE_LOCATION: ${{ inputs.CFN_TEMPLATE_FILE_LOCATION }}
-    CC_REGION: ${{ inputs.CC_REGION }}
-    CC_RISK_LEVEL: ${{ inputs.CC_RISK_LEVEL }}
+    apikey: ${{ inputs.apikey }}
+    region: ${{ inputs.region }}
+    acceptedQty: ${{ inputs.acceptedQty }}
+    template: ${{ inputs.template }}
