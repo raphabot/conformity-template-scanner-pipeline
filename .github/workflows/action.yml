@@ -23,7 +23,7 @@ jobs:
     # - run: npm run build --if-present
     # - run: npm test
     - name: Cloud One Conformity Pipeline Scanner
-      uses: raphabot/conformity-template-scanner-pipeline@v3
+      uses: raphabot/conformity-template-scanner-pipeline@v4
       with:
         apikey: ${{ secrets.apikey }}
         region: us-west-2
