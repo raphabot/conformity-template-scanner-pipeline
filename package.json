@@ -16,7 +16,8 @@
     "url": "https://github.com/raphabot/conformity-template-scanner-pipeline/issues"
   },
   "homepage": "https://github.com/raphabot/conformity-template-scanner-pipeline#readme",
-  "devDependencies": {
-    "cloud-conformity": "^1.0.12"
+  "devDependencies": {},
+  "dependencies": {
+    "cloud-conformity": "^1.1.4"
   }
 }

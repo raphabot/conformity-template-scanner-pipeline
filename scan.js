@@ -31,7 +31,6 @@ scan(region, apikey)
     return failOnFailure(res, acceptedQty);
   })
   .then(res => {
-    console.log(res);
     if (res){
       console.log("Too much failues!");
       process.exit(1);
