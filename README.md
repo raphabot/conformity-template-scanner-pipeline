@@ -11,8 +11,7 @@ To use the script, specify the following required environment variables:
     * Options: See the Cloud Conformity [documentation](https://github.com/cloudconformity/documentation-api#endpoints)
 
 And, if necessary, the optional environment variable:
-  * `acceptedQty` (default: `LOW`)
-    * Options: `LOW` | `MEDIUM` | `HIGH` | `VERY_HIGH` | `EXTREME`
+  * `acceptedQty` (default: `0`)
 
 ## Examples
 
