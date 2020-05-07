@@ -7,9 +7,11 @@ inputs:
   region:
     description: "Region of your Cloud One Conformity console, eg us-west-2."
     required: true
+    default: us-west-2
   acceptedQty:
     description: "Severity trigger (Options: LOW | MEDIUM | HIGH | VERY_HIGH | EXTREME), eg LOW"
-    required: true
+    required: false
+    default: LOW
   template:
     description: "Location of the file to be scanned, eg template.yml."
     required: true
@@ -19,8 +21,3 @@ branding:
 runs:
   using: "node12"
   main: "scan.js"
-  env:
-    apikey: ${{ inputs.apikey }}
-    region: ${{ inputs.region }}
-    acceptedQty: ${{ inputs.acceptedQty }}
-    template: ${{ inputs.template }}
