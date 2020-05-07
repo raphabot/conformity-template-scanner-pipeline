@@ -5,16 +5,22 @@ name: Conformity Template Scanner Pipeline
 on:
   push:
     branches: [ master ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
     steps:
-    - run: apt install nodejs
-    - run: apt install npm
-    - run: apt update -y
-    - run: nvm install 12
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
     - run: npm version
-    - run: npm install
+    - run: npm ci
+    - run: npm run build --if-present
     - run: npm test
     - name: Cloud One Conformity Pipeline Scanner
       uses: raphabot/conformity-template-scanner-pipeline@v1
