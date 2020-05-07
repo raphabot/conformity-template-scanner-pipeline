@@ -21,7 +21,7 @@ jobs:
     - name: Cloud One Conformity Pipeline Scanner
       uses: raphabot/conformity-template-scanner-pipeline@v1
       with:
-        apikey: ${{ secret.apikey }}
+        apikey: ${{ secrets.apikey }}
         region: us-west-2
         acceptedQty: 1
         template: s3.template.yaml
