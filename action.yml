@@ -19,10 +19,12 @@ branding:
   icon: "check"
   color: "red"
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  env:
-    apikey: ${{ inputs.apikey }}
-    region: ${{ inputs.region }}
-    template: ${{ inputs.template }}
-    acceptedQty: ${{ inputs.acceptedQty }}
+    using: 'node12'
+    main: 'scan.js'
+  # using: 'docker'
+  # image: 'Dockerfile'
+    env:
+     apikey: ${{ inputs.apikey }}
+     region: ${{ inputs.region }}
+     template: ${{ inputs.template }}
+     acceptedQty: ${{ inputs.acceptedQty }}
