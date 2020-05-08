@@ -1,6 +1,13 @@
-# Cloud Conformity Pipeline Scanner
+# :white_check_mark: Cloud Conformity Pipeline Scanner
+
+<img src="Trend-Micro-Logo.png">
 
 Pipeline scanner uses Cloud Conformity's [Template Scanner](https://www.cloudconformity.com/solutions/aws/cloudformation-template-scanner.html) to secure your CloudFormation templates **before** they're deployed.
+
+## Requirements
+
+* Have an [Cloud One Conformity](https://www.trendmicro.com/en_us/business/products/hybrid-cloud/cloud-one-conformity.html) account. [Sign up for free trial now](https://www.cloudconformity.com/identity/sign-up.html) if it's not already the case!
+* A cloud formation template to be scan.
 
 ## Usage
 
@@ -8,12 +15,13 @@ To use the script, specify the following required environment variables:
   * `apikey`
   * `region`
   * `template`
-    * Options: See the Cloud Conformity [documentation](https://github.com/cloudconformity/documentation-api#endpoints)
-
-And, if necessary, the optional environment variable:
   * `acceptedQty` (default: `0`)
 
+ **PS.: ALWAYS use secrets to expose your credentials!**
+
 ## Example
+
+Add an Action in your `.github/workflow` yml file to scan your cloud formation template with Cloud One Conformity.
 
 ```yml
 name: My CI/CD Pipeline
@@ -36,3 +44,8 @@ jobs:
               region: us-west-2
               template: template.yaml
 ``` 
+
+## Support
+
+Official support from Trend Micro is not available. Individual contributors may
+be Trend Micro employees, but are not official support.
