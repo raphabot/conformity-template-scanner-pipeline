@@ -1,59 +1,161 @@
-AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+
+  AmznLinux2AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
+  AccountOneCIDRvpc:
+    Type: String
+    Default: 10.1.0.0/16
+
+  PrivateSubnetCIDR:
+    Type: String
+    Default: 10.1.0.0/24
+
+  PublicSubnetCIDR:
+    Type: String
+    Default: 10.1.0.0/24
+
+  CIDR:
+    Type: String
+    Default: '0.0.0.0/0'
+
 Resources:
-  challengebucket:
-    Type: 'AWS::S3::Bucket'
+  VPCPrivate:
+    Type: AWS::EC2::VPC
     Properties:
-      VersioningConfiguration:
-        Status: Enabled
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-                SSEAlgorithm: AES256
-                KMSMasterKeyID: aws/kms
-      ObjectLockEnabled: true
-      ObjectLockConfiguration:
-        ObjectLockEnabled: Enabled
-      AccelerateConfiguration:
-        AccelerationStatus: Enabled
-      LoggingConfiguration:
-        DestinationBucketName: arn:aws:s3:::loggingbucket
-        LogFilePrefix: log
+      CidrBlock: !Ref AccountOneCIDRvpc
+      EnableDnsSupport: True
+      EnableDnsHostnames: True
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref PrivateSubnetCIDR
       Tags:
-        - Key: Environment
-          Value: SecJam
-        - Key: Role
-          Value: Challenge
-        - Key: Owner
-          Value: Trend-Micro
         - Key: Name
-          Value: Challenge-Bucket
-  ChallengeBucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
+          Value: PrivateSubnet
+      VpcId: !Ref VPC
+
+  RouteTable:
+    Type: AWS::EC2::RouteTable
     Properties:
-      Bucket: !Ref challengebucket
-      PolicyDocument:
-        Version: 2012-10-17
-        Id: Challenge-Bucket-Policy
-        Statement:
-          - Sid: DenyIncorrectEncryptionHeader
-            Effect: Deny
-            Principal: "*"
-            Action: s3:PutObject
-            Resource: !Join 
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref challengebucket
-                - ''
-            Condition:
-              StringNotEquals:
-                s3:x-amz-server-side-encryption: AES256
-Description: ''
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: SMRouteTable
+
+  # TransitGateway Not yet supported so need custom cloudformation lambda
+  TransitRouteEntry:
+     Type: AWS::EC2::Route
+     DependsOn: TransitGateway
+     Properties:
+       RouteTableId: !Ref RouteTable
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId: !Ref TransitGateway
+
+  RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref PrivateSubnet
+
+  DefaultSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: DefaultSG
+      GroupDescription: Default Security Group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: 443
+          ToPort: 443
+        - IpProtocol: icmp
+          CidrIp: 10.0.0.0/8
+          FromPort: -1
+          ToPort: -1
+      Tags:
+        - Key: Name
+          Value: DefaultSG
+      VpcId: !Ref VPC
+
+  InboundSGRule:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      FromPort: 443
+      ToPort: 443
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - DefaultSG
+          - GroupId
+      GroupId:
+        Fn::GetAtt:
+          - DefaultSG
+          - GroupId
+
+  VPCPublic:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref AccountOneCIDRvpc
+      EnableDnsSupport: True
+      EnableDnsHostnames: True
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref PublicSubnetCIDR
+      Tags:
+        - Key: Name
+          Value: PublicSubnet
+      VpcId: !Ref VPC
+      
+  TransitGateway:
+    Type: "AWS::EC2::TransitGateway"
+    Properties:
+      AutoAcceptSharedAttachments: enable
+      DefaultRouteTableAssociation: enable
+      DefaultRouteTablePropagation: enable
+      Description: Transit Gateway Demo
+      DnsSupport: enable
+      VpnEcmpSupport: enable
+      Tags: 
+        - Key: Name
+          Value: Transit Gateway Demo
+
+  TransitGatewayAttachment:    
+    Type: "AWS::EC2::TransitGatewayAttachment"
+    Properties:
+      SubnetIds: 
+        - !Ref PrivateSubnet
+      Tags: 
+        - Key: Name
+          Value: Transite Gateway Demo
+      TransitGatewayId: !Ref TransitGateway
+      VpcId: !Ref VPC
+
+  AmazonLinux2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AmznLinux2AmiId
+      InstanceType: t2.micro
+      SecurityGroupIds:
+        - !Ref DefaultSG
+      SubnetId: !Ref PrivateSubnet
+      Tags:
+        - Key: Name
+          Value: Amazon Linux 2
+
 Outputs:
-  challengebucketName:
-    Value: !Ref challengebucket
-Resources:
-  S3Bucket:
-    Type: AWS::S3::Bucket
-    DeletionPolicy: Delete
-    Properties:
-      BucketName: my-bucket
+  MyStackName:
+    Description: StackName
+    Value: !Ref "AWS::StackName"
+  StackVPC:
+    Description: The ID of the VPC
+    Value: !Ref VPC
+  TransitGateWayOutput:
+    Description: The ID of the TransitGateway
+    Value: !Ref TransitGateway
+  RouteTableOutput:
+    Description: RouteTable Output
+    Value: !Ref RouteTable
