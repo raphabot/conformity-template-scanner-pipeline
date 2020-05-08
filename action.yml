@@ -3,17 +3,12 @@ description: "Scan CloudFormation files with Cloud One Conformity."
 inputs:
   apikey:
     description: "Cloud One Conformity API Key"
-    required: true
   region:
     description: "Region of your Cloud One Conformity console, eg us-west-2."
-    required: true
-    default: us-west-2
   acceptedQty:
     description: "Severity trigger"
-    required: true
   template:
     description: "Location of the file to be scanned, eg template.yml."
-    required: true
 branding:
   icon: "check"
   color: "red"
