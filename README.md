@@ -12,8 +12,8 @@ Pipeline scanner uses Cloud Conformity's [Template Scanner](https://www.cloudcon
 ## Usage
 
 To use the script, specify the following required environment variables:
-  * `apikey`
-  * `region`
+  * `cc_apikey`
+  * `cc_region`
   * `template`
   * `acceptedQty` (default: `0`)
 
@@ -38,9 +38,9 @@ jobs:
           - name: Cloud One Conformity Pipeline Scanner
             uses: raphabot/conformity-template-scanner-pipeline@v15
             env:
-              apikey: ${{ secrets.apikey }}
+              cc_apikey: ${{ secrets.apikey }}
               acceptedQty: 10
-              region: us-west-2
+              cc_region: us-west-2
               template: template.yaml
 ``` 
 
