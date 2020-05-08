@@ -1,3 +1,56 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  challengebucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+                KMSMasterKeyID: aws/kms
+      ObjectLockEnabled: true
+      ObjectLockConfiguration:
+        ObjectLockEnabled: Enabled
+      AccelerateConfiguration:
+        AccelerationStatus: Enabled
+      LoggingConfiguration:
+        DestinationBucketName: arn:aws:s3:::loggingbucket
+        LogFilePrefix: log
+      Tags:
+        - Key: Environment
+          Value: SecJam
+        - Key: Role
+          Value: Challenge
+        - Key: Owner
+          Value: Trend-Micro
+        - Key: Name
+          Value: Challenge-Bucket
+  ChallengeBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref challengebucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Id: Challenge-Bucket-Policy
+        Statement:
+          - Sid: DenyIncorrectEncryptionHeader
+            Effect: Deny
+            Principal: "*"
+            Action: s3:PutObject
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref challengebucket
+                - ''
+            Condition:
+              StringNotEquals:
+                s3:x-amz-server-side-encryption: AES256
+Description: ''
+Outputs:
+  challengebucketName:
+    Value: !Ref challengebucket
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
