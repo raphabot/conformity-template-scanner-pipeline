@@ -35,7 +35,6 @@ jobs:
     CloudFormation-Scan:
        runs-on: ubuntu-latest
        steps:
-          - uses: actions/checkout@v2
           - name: Cloud One Conformity Pipeline Scanner
             uses: raphabot/conformity-template-scanner-pipeline@v15
             env:
