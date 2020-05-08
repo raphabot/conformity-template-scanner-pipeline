@@ -12,10 +12,10 @@ Pipeline scanner uses Cloud Conformity's [Template Scanner](https://www.cloudcon
 ## Usage
 
 To use the script, specify the following required environment variables:
-  * `cc_apikey`
-  * `cc_region`
-  * `template`
-  * `acceptedQty` (Options: LOW | MEDIUM | HIGH | VERY-HIGH | EXTREME, Default: LOW)
+  * `cc_apikey` (Cloud One COnformity API KEY)
+  * `cc_region` (Cloud One COnformity account region)
+  * `templatePath` (Path of the template to be scanned)
+  * `maxExtreme | maxVeryHigh | maxHigh | maxMedium | maxLow` (Choose any of the options and set a number of how many violations are accepted)
 
  **PS.: ALWAYS use secrets to expose your credentials!**
 
@@ -39,9 +39,13 @@ jobs:
             uses: raphabot/conformity-template-scanner-pipeline@version
             env:
               cc_apikey: ${{ secrets.apikey }}
-              acceptedQty: LOW
+              maxExtreme: 0
+              maxVeryHigh: 1
+              maxHigh: 3
+              maxMedium: 5
+              maxLow:10
               cc_region: us-west-2
-              template: template.yaml
+              templatePath: template/infrastructure.yaml
 ``` 
 
 ## Support
