@@ -11,7 +11,7 @@ inputs:
   acceptedQty:
     description: "Severity trigger"
     required: false
-    default: LOW
+    default: 10
   template:
     description: "Location of the file to be scanned, eg template.yml."
     required: true
