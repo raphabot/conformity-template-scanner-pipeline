@@ -1,6 +1,6 @@
 # Cloud Conformity Pipeline Scanner
 
-<img src="Trend-Micro-Logo.png">
+<img src="images/Trend-Micro-Logo.png">
 
 Pipeline scanner uses Cloud Conformity's [Template Scanner](https://www.cloudconformity.com/solutions/aws/cloudformation-template-scanner.html) to secure your CloudFormation templates **before** they're deployed.
 
