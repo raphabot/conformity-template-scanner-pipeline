@@ -1,9 +1,9 @@
 name: "Cloud One Conformity Pipeline Scanner"
 description: "Scan CloudFormation files with Cloud One Conformity."
 inputs:
-  apikey:
+  cc_apikey:
     description: "Cloud One Conformity API Key"
-  region:
+  cc_region:
     description: "Region of your Cloud One Conformity console, eg us-west-2."
   acceptedQty:
     description: "Severity trigger"
