@@ -13,6 +13,26 @@ To use the script, specify the following required environment variables:
 And, if necessary, the optional environment variable:
   * `acceptedQty` (default: `0`)
 
-## Examples
+## Example
 
-See the [Cloud Conformity Pipeline Demos](https://github.com/OzNetNerd/Cloud-Conformity-Pipeline-Demos) repo for example pipelines.
+```yml
+name: My CI/CD Pipeline
+
+on: 
+  push:
+    branches: 
+      - master
+      
+jobs:      
+    Cloudformation-Scan:
+       runs-on: ubuntu-latest
+       steps:
+          - uses: actions/checkout@v2
+          - name: Cloud One Conformity Pipeline Scanner
+            uses: raphabot/conformity-template-scanner-pipeline@v15
+            env:
+              apikey: ${{ secrets.apikey }}
+              acceptedQty: 10
+              region: us-west-2
+              template: template.yaml
+``` 
