@@ -22,8 +22,8 @@ inputs:
   maxLow:
     description: "Maximum Low detections accepted."
     required: false
-  template:
-    description: "Location of the file to be scanned, eg template.yml."
+  templatePath:
+    description: "Location of the file to be scanned, eg templates/template.yml."
 branding:
   icon: "check"
   color: "red"
