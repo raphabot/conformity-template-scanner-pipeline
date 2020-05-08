@@ -5,9 +5,9 @@ const { promisify } = require('util');
 const readFile = promisify(fs.readFile);
 const CloudConformity = require("cloud-conformity");
 
-const scan = async (ccEndpoint, ccApiKey) => {
+const scan = async (templatePath, ccEndpoint, ccApiKey) => {
   const cc = new CloudConformity.CloudConformity(ccEndpoint, ccApiKey);
-  const template = await readFile('s3.template.yaml', 'utf8');
+  const template = await readFile(templatePath, 'utf8');
   const result = await cc.scanACloudFormationTemplateAndReturAsArrays(template);
   // console.log(JSON.stringify(result.failure, null, 2));
   const results = result.failure.reduce((total, result) => {
@@ -54,7 +54,7 @@ const acceptedResults = {
   low: process.env.maxLow? process.env.maxLow : Number.MAX_SAFE_INTEGER
 };
 
-scan(region, apikey)
+scan(templatePath, region, apikey)
   .then(res => {
     // console.log(JSON.stringify(res.results, null, 2));
     //console.log(JSON.stringify(res, null, 2));
