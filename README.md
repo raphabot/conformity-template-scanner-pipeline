@@ -1,4 +1,4 @@
-# :white_check_mark: Cloud Conformity Pipeline Scanner
+# Cloud Conformity Pipeline Scanner
 
 <img src="Trend-Micro-Logo.png">
 
