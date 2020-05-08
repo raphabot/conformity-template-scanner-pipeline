@@ -32,7 +32,7 @@ scan(region, apikey)
   })
   .then(res => {
     if (res){
-      console.log("Too much failues!");
+      console.log("Too much failures!");
       process.exit(1);
     }
     console.log("Less failures than allowed, so let's deploy it!");
