@@ -43,7 +43,7 @@ jobs:
               maxVeryHigh: 1
               maxHigh: 3
               maxMedium: 5
-              maxLow:10
+              maxLow: 10
               cc_region: us-west-2
               templatePath: template/infrastructure.yaml
 ``` 
