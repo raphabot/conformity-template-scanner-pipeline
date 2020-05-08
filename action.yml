@@ -3,10 +3,25 @@ description: "Scan CloudFormation files with Cloud One Conformity."
 inputs:
   cc_apikey:
     description: "Cloud One Conformity API Key"
+    required: true
   cc_region:
     description: "Region of your Cloud One Conformity console, eg us-west-2."
-  acceptedQty:
-    description: "Severity trigger"
+    required: true
+  maxExtreme:
+    description: "Maximum Extreme detections accepted."
+    required: false
+  maxVeryHigh:
+    description: "Maximum Very High detections accepted."
+    required: false
+  maxHigh:
+    description: "Maximum High detections accepted."
+    required: false
+  maxMedium:
+    description: "Maximum Medium detections accepted."
+    required: false
+  maxLow:
+    description: "Maximum Low detections accepted."
+    required: false
   template:
     description: "Location of the file to be scanned, eg template.yml."
 branding:
@@ -15,10 +30,3 @@ branding:
 runs:
     using: 'node12'
     main: 'scan.js'
-  # using: 'docker'
-  # image: 'Dockerfile'
-    # env:
-    #  apikey: ${{ inputs.apikey }}
-    #  region: ${{ inputs.region }}
-    #  template: ${{ inputs.template }}
-    #  acceptedQty: ${{ inputs.acceptedQty }}
