@@ -21,6 +21,11 @@ branding:
 runs:
     using: 'node12'
     main: 'scan.js'
+    env:
+      apikey: '${{ inputs.apikey }}'
+      region: '${{ inputs.region }}'
+      template: '${{ inputs.template }}'
+      acceptedQty: ${{ inputs.acceptedQty }}'
   # using: 'docker'
   # image: 'Dockerfile'
     # env:
