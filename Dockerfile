@@ -8,5 +8,7 @@ WORKDIR /usr/src/app
 
 RUN npm install
 
-ENTRYPOINT [ "node", "scan.js" ]
+RUN node scan.js
+
+# ENTRYPOINT [ "node", "scan.js" ]
 
