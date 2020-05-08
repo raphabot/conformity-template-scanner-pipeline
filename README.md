@@ -15,7 +15,7 @@ To use the script, specify the following required environment variables:
   * `cc_apikey`
   * `cc_region`
   * `template`
-  * `acceptedQty` (default: `0`)
+  * `acceptedQty` (Options: LOW | MEDIUM | HIGH | VERY-HIGH | EXTREME, Default: LOW)
 
  **PS.: ALWAYS use secrets to expose your credentials!**
 
@@ -36,10 +36,10 @@ jobs:
        runs-on: ubuntu-latest
        steps:
           - name: Cloud One Conformity Pipeline Scanner
-            uses: raphabot/conformity-template-scanner-pipeline@v15
+            uses: raphabot/conformity-template-scanner-pipeline@version
             env:
               cc_apikey: ${{ secrets.apikey }}
-              acceptedQty: 10
+              acceptedQty: LOW
               cc_region: us-west-2
               template: template.yaml
 ``` 
