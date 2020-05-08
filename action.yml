@@ -10,8 +10,7 @@ inputs:
     default: us-west-2
   acceptedQty:
     description: "Severity trigger"
-    required: false
-    default: 10
+    required: true
   template:
     description: "Location of the file to be scanned, eg template.yml."
     required: true
@@ -22,10 +21,10 @@ runs:
     using: 'node12'
     main: 'scan.js'
     env:
-      apikey: '${{ inputs.apikey }}'
-      region: '${{ inputs.region }}'
-      template: '${{ inputs.template }}'
-      acceptedQty: ${{ inputs.acceptedQty }}'
+      apikey: ${{ inputs.apikey }}
+      region: ${{ inputs.region }}
+      template: ${{ inputs.template }}
+      acceptedQty: ${{ inputs.acceptedQty }}
   # using: 'docker'
   # image: 'Dockerfile'
     # env:
