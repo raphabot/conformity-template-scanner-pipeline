@@ -23,8 +23,8 @@ runs:
     main: 'scan.js'
   # using: 'docker'
   # image: 'Dockerfile'
-    env:
-     apikey: ${{ inputs.apikey }}
-     region: ${{ inputs.region }}
-     template: ${{ inputs.template }}
-     acceptedQty: ${{ inputs.acceptedQty }}
+    # env:
+    #  apikey: ${{ inputs.apikey }}
+    #  region: ${{ inputs.region }}
+    #  template: ${{ inputs.template }}
+    #  acceptedQty: ${{ inputs.acceptedQty }}
