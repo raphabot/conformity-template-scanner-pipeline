@@ -48,6 +48,15 @@ jobs:
               templatePath: template/infrastructure.yaml
 ``` 
 
+## Contributing
+
+If you encounter a bug, think of a useful feature, or find something confusing
+in the docs, please
+[create a new issue](https://github.com/raphabot/conformity-template-scanner-pipeline/issues/new)!
+
+We :heart: pull requests. If you'd like to fix a bug, contribute to a feature or
+just correct a typo, please feel free to do so.
+
 ## Support
 
 Official support from Trend Micro is not available. Individual contributors may
