@@ -12,8 +12,8 @@ Pipeline scanner uses Cloud Conformity's [Template Scanner](https://www.cloudcon
 ## Usage
 
 To use the script, specify the following required environment variables:
-  * `cc_apikey` (Cloud One COnformity API KEY)
-  * `cc_region` (Cloud One COnformity account region)
+  * `cc_apikey` (Cloud One Conformity API KEY)
+  * `cc_region` (Cloud One Conformity account region)
   * `templatePath` (Path of the template to be scanned)
   * `maxExtreme | maxVeryHigh | maxHigh | maxMedium | maxLow` (Choose any of the options and set a number of how many violations are accepted)
 
