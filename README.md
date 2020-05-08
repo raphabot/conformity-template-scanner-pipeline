@@ -24,7 +24,7 @@ on:
       - master
       
 jobs:      
-    Cloudformation-Scan:
+    CloudFormation-Scan:
        runs-on: ubuntu-latest
        steps:
           - uses: actions/checkout@v2
