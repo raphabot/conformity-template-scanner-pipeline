@@ -24,6 +24,7 @@ inputs:
     required: false
   templatePath:
     description: "Location of the file to be scanned, eg templates/template.yml."
+    required: true
 branding:
   icon: "check"
   color: "red"
