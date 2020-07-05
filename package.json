@@ -18,6 +18,6 @@
   "homepage": "https://github.com/raphabot/conformity-template-scanner-pipeline#readme",
   "devDependencies": {},
   "dependencies": {
-    "cloud-conformity": "^1.1.4"
+    "cloud-conformity": "^1.1.5"
   }
 }
