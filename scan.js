@@ -13,7 +13,7 @@ const scan = async (templatePath, ccEndpoint, ccApiKey) => {
   const results = result.failure.reduce((total, result) => {
     if (result.attributes['risk-level'] === 'EXTREME'){
       total.extreme +=1;
-    } else if (result.attributes['risk-level'] === 'VERY-HIGH') {
+    } else if (result.attributes['risk-level'] === 'VERY_HIGH') {
       total.veryHigh +=1;
     } else if (result.attributes['risk-level'] === 'HIGH') {
       total.high +=1;
