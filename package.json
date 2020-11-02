@@ -1,10 +1,10 @@
 {
-  "name": "conformity-template-scanner-pipeline",
+  "name": "conformity-template-scanner",
   "version": "1.0.0",
-  "description": "",
+  "description": "Small tool to scan your cloudformation files for misconfigurations using Conformity.",
   "main": "index.js",
   "scripts": {
-    "test": "node scan.js cloudformation.template.json"
+    "test": "echo \"No test specified\""
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,8 @@
   "devDependencies": {},
   "dependencies": {
     "cloud-conformity": "^1.1.5"
+  },
+  "bin": {
+    "conformity-scan": "scan.js"
   }
 }
