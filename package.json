@@ -1,6 +1,6 @@
 {
   "name": "conformity-template-scanner",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Small tool to scan your cloudformation files for misconfigurations using Conformity.",
   "main": "index.js",
   "scripts": {
