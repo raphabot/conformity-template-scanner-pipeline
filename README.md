@@ -29,12 +29,14 @@ name: My CI/CD Pipeline
 on: 
   push:
     branches: 
-      - master
+      - main
       
 jobs:      
     CloudFormation-Scan:
        runs-on: ubuntu-latest
        steps:
+          - name: Checkout
+            uses: actions/checkout@v2
           - name: Cloud One Conformity Pipeline Scanner
             uses: raphabot/conformity-template-scanner-pipeline@version
             env:
