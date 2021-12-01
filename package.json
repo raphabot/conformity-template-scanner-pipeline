@@ -18,7 +18,7 @@
   "homepage": "https://github.com/raphabot/conformity-template-scanner-pipeline#readme",
   "devDependencies": {},
   "dependencies": {
-    "cloud-conformity": "^1.1.5"
+    "cloud-conformity": "^1.2.0"
   },
   "bin": {
     "conformity-scan": "scan.js"
