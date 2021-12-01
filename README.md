@@ -16,6 +16,9 @@ To use the script, specify the following required environment variables:
   * `cc_region` (Cloud One Conformity account region)
   * `templatePath` (Path of the template to be scanned)
   * `maxExtreme | maxVeryHigh | maxHigh | maxMedium | maxLow` (Choose one or more of the options and set a number of how many violations are accepted)
+  * `cc_output_result` (Either true or false, defaults to false. If set to true, it outputs the detected risks, instead of just the amount.)
+  * `profileId` (OPTIONAL. Provides a profile Id to be used by the scanner.)
+  * `accountId` (OPTIONAL. Provides an account Id to be used by the scanner.)
 
  **PS.: ALWAYS use secrets to expose your credentials!**
 
@@ -46,6 +49,7 @@ jobs:
               maxLow: 10
               cc_region: us-west-2
               templatePath: template/infrastructure.yaml
+              cc_output_results: true
 ``` 
 
 ## Docker Container Example
@@ -56,7 +60,7 @@ https://hub.docker.com/r/raphabot/conformity-template-scanner-pipeline
 
 ```bash
 docker run -v /home/ec2-user/dynamotest.template:/app/dynamotest.template -e cc_apikey=$MYAPIKEY -e cc_region=$MYREGION -e maxExtreme=0 -e maxVeryHigh=0
--e maxHigh=0 -e maxMedium=0 -e maxLow=0 -e templatePath=infrastructure.yaml felipecosta09/conformity-template-scanner-pipeline:latest
+-e maxHigh=0 -e maxMedium=0 -e maxLow=0 -e templatePath=infrastructure.yaml -cc_output_results=true felipecosta09/conformity-template-scanner-pipeline:latest
 ```
 
 **PS.: To be able to scan a local template from a machine or inside a pipeline, the parameter "-v" is required in the docker run command, the example specifies a local file being copied to the container that will scan the Cloud Formation template ```/home/ec2-user/dynamotest.template:/app/dynamotest.template```, where:**
@@ -69,7 +73,7 @@ docker run -v /home/ec2-user/dynamotest.template:/app/dynamotest.template -e cc_
 To run the scanner in the Node CLI, just set the envinronment variables before execute the node script:
 
 ```bash
-cc_apikey=$MYAPIKEY cc_region=$MYREGION maxExtreme=0 maxVeryHigh=0 maxHigh=0 maxMedium=0 maxLow=0 templatePath=infrastructure.yaml node scan.js
+cc_apikey=$MYAPIKEY cc_region=$MYREGION maxExtreme=0 maxVeryHigh=0 maxHigh=0 maxMedium=0 maxLow=0 templatePath=infrastructure.yaml cc_output_results=true node scan.js
 ```
 
 ## Contributing

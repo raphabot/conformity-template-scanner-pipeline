@@ -6,13 +6,9 @@ const { promisify } = require('util');
 const readFile = promisify(fs.readFile);
 const CloudConformity = require("cloud-conformity");
 
-const scan = async (templatePath, ccEndpoint, ccApiKey) => {
-  const cc = new CloudConformity.CloudConformity(ccEndpoint, ccApiKey);
-  const template = await readFile(templatePath, 'utf8');
-  const result = await cc.scanACloudFormationTemplateAndReturAsArrays(template);
-  const messages = [];
-  // console.log(JSON.stringify(result.failure, null, 2));
-  const results = result.failure.reduce((total, result) => {
+const computeFailures = (result, messages) => {
+  console.log(JSON.stringify(result, null, 2));
+  return result.failure.reduce((total, result) => {
     messages.push(`Risk: ${result.attributes['risk-level']} \tReason: ${result.attributes.message}`);
     if (result.attributes['risk-level'] === 'EXTREME'){
       total.extreme +=1;
@@ -33,6 +29,15 @@ const scan = async (templatePath, ccEndpoint, ccApiKey) => {
     medium: 0,
     low: 0,
   });
+}
+
+const scan = async (templatePath, ccEndpoint, ccApiKey, profileId, accountId) => {
+  const cc = new CloudConformity.CloudConformity(ccEndpoint, ccApiKey);
+  const template = await readFile(templatePath, 'utf8');
+  // Scans the template using Conformity module.
+  const result = await cc.scanACloudFormationTemplateAndReturAsArrays(template, profileId, accountId);
+  const messages = [];
+  const results = computeFailures(result, messages);
   return {
     detections: result.failure,
     results: results,
@@ -58,11 +63,11 @@ const acceptedResults = {
   low: process.env.maxLow? process.env.maxLow : Number.MAX_SAFE_INTEGER
 };
 const outputResults = process.env.cc_output_results? true : false;
+const profileId = process.env.profileId;
+const accountId = process.env.accountId;
 
-scan(templatePath, region, apikey, outputResults)
+scan(templatePath, region, apikey, profileId, accountId)
   .then(res => {
-    // console.log(JSON.stringify(res.results, null, 2));
-    //console.log(JSON.stringify(res, null, 2));
     console.log(`Failures found: ${JSON.stringify(res.results, null, 2)}`);
     console.log('\n');
     console.log(`Quantity of failures allowed: ${JSON.stringify(acceptedResults, null, 2)}`);
