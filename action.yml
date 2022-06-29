@@ -25,6 +25,9 @@ inputs:
   templatePath:
     description: "Location of the file to be scanned, eg templates/template.yml."
     required: true
+  templatesDirPath:
+    description: "(Optional) Location of the directory of templates to be scanned, (e.g., templates). This ignores the value of 'templatePath' if supplied."
+    required: false
 branding:
   icon: "check"
   color: "red"

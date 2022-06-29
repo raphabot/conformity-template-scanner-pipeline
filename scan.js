@@ -5,6 +5,8 @@ const fs = require('fs');
 const { promisify } = require('util');
 const readFile = promisify(fs.readFile);
 const CloudConformity = require("cloud-conformity");
+const readDir = promisify(fs.readdir);
+const readOptions = { encoding: "utf8" }
 
 const computeFailures = (result, messages) => {
   console.log(JSON.stringify(result, null, 2));
@@ -31,26 +33,40 @@ const computeFailures = (result, messages) => {
   });
 }
 
-const scan = async (templatePath, ccEndpoint, ccApiKey, profileId, accountId) => {
+const scan = async (templatePath, ccEndpoint, ccApiKey, profileId, accountId, templatesDirPath) => {
   const cc = new CloudConformity.CloudConformity(ccEndpoint, ccApiKey);
-  const template = await readFile(templatePath, 'utf8');
+  if (templatesDirPath) {
+    return batchScanTemplates(cc, templatesDirPath, profileId, accountId)
+  }
+  return scanTemplate(cc, templatePath, profileId, accountId)
+}
+
+const failOnFailure = (failures, acceptedQty) => {
+  return ((failures.extreme > acceptedQty.extreme) || (failures.veryHigh > acceptedQty.veryHigh) || (failures.high > acceptedQty.high) || (failures.medium > acceptedQty.medium) || (failures.low > acceptedQty.low))
+};
+
+const batchScanTemplates = async (cc, templatesDirPath, profileId, accountId) => {
+  const dir = await readDir(templatesDirPath, readOptions)
+  return Promise.all(dir.map(async (template) => {
+      const fullPath = templatesDirPath + "/" + template
+      return scanTemplate(cc, fullPath, profileId, accountId)
+  }))
+}
+
+const scanTemplate = async (cc, templatePath, profileId, accountId) => {
+  const template = await readFile(templatePath, readOptions);
   // Scans the template using Conformity module.
+  console.log("Scan template: (%s)", templatePath)
   const result = await cc.scanACloudFormationTemplateAndReturAsArrays(template, profileId, accountId);
   const messages = [];
   const results = computeFailures(result, messages);
   return {
-    detections: result.failure,
-    results: results,
-    messages: messages
+      template: templatePath,
+      detections: result.failure,
+      results: results,
+      messages: messages
   };
-};
-
-const failOnFailure = (failures, acceptedQty) => {
-  if ((failures.extreme > acceptedQty.extreme) || (failures.veryHigh > acceptedQty.veryHigh) || (failures.high > acceptedQty.high) || (failures.medium > acceptedQty.medium) || (failures.low > acceptedQty.low)) {
-    return true;
-  }
-  return false;
-};
+}
 
 const region = process.env.cc_region;
 const apikey = process.env.cc_apikey;
@@ -65,26 +81,40 @@ const acceptedResults = {
 const outputResults = process.env.cc_output_results? true : false;
 const profileId = process.env.profileId;
 const accountId = process.env.accountId;
+const templatesDirPath = process.env.templatesDirPath;
 
-scan(templatePath, region, apikey, profileId, accountId)
-  .then(res => {
-    console.log(`Failures found: ${JSON.stringify(res.results, null, 2)}`);
-    console.log('\n');
-    console.log(`Quantity of failures allowed: ${JSON.stringify(acceptedResults, null, 2)}`);
-    if (outputResults && res.messages){
-      console.log('\n');
-      console.log('Results:\n');
-      console.log(res.messages.join('\n'));
+scan(templatePath, region, apikey, profileId, accountId, templatesDirPath)
+  .then(value => {
+    const results = Array.isArray(value) ? value : [value]
+    const COMPLIANT_MESSASGE = "Template passes configured checks."
+    const NON_COMPLIANT_MESSAGE = "Security and/or misconfiguration issue(s) found in template(s): "
+    const nonCompliantTemplates = [];
+    let isCompliant = true;
+    for (const result of results) {
+        console.log(`\nFailures found: ${JSON.stringify(result.results, null, 2)}`);
+        console.log('\n');
+        console.log(`Quantity of failures allowed: ${JSON.stringify(acceptedResults, null, 2)}`);
+        if (outputResults && result.messages) {
+            console.log('\n');
+            console.log('Results:\n');
+            console.log(result.messages.join('\n'));
+        }
+        console.log('\n');
+        if (failOnFailure(result.results, acceptedResults)) {
+            isCompliant = false;
+            nonCompliantTemplates.push(result.template)
+        }
     }
-    console.log('\n');
-    return failOnFailure(res.results, acceptedResults);
+    return {
+        status: isCompliant,
+        message: isCompliant ? COMPLIANT_MESSASGE : NON_COMPLIANT_MESSAGE + " [" + nonCompliantTemplates + "]"
+    };
   })
   .then(res => {
-    if (res){
-      console.log("Security and/or misconfiguration issue(s) found in template.");
-      process.exit(1);
+    console.log(res.message)
+    if (!res.status) {
+        process.exit(1);
     }
-    console.log("Template passes configured checks.");
     process.exit(0);
   })
   .catch(err => {
