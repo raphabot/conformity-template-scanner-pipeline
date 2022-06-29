@@ -15,6 +15,7 @@ To use the script, specify the following required environment variables:
   * `cc_apikey` (Cloud One Conformity API KEY)
   * `cc_region` (Cloud One Conformity account region)
   * `templatePath` (Path of the template to be scanned)
+  * `templatesDirPath` (OPTIONAL. Location of the directory of templates to be scanned, (e.g., templates). This ignores the value of 'templatePath' if supplied.)
   * `maxExtreme | maxVeryHigh | maxHigh | maxMedium | maxLow` (Choose one or more of the options and set a number of how many violations are accepted)
   * `cc_output_result` (Either true or false, defaults to false. If set to true, it outputs the detected risks, instead of just the amount.)
   * `profileId` (OPTIONAL. Provides a profile Id to be used by the scanner.)
@@ -51,6 +52,7 @@ jobs:
               maxLow: 10
               cc_region: us-west-2
               templatePath: template/infrastructure.yaml
+              templatesDirPath: templates # This is an example to scan all the templates inside the folder "templates"
               cc_output_results: true
 ``` 
 
