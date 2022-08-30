@@ -1,5 +1,5 @@
 - id: cc-template-scanner
   name: Cloud Conformity Template Scanner
   description: "Scans CloudFormation templates before they're deployed."
-  entry: index
+  entry: conformity-scan
   language: node
