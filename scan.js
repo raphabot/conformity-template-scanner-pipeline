@@ -9,7 +9,7 @@ const readDir = promisify(fs.readdir);
 const readOptions = { encoding: "utf8" }
 
 const computeFailures = (result, messages) => {
-  console.log(JSON.stringify(result, null, 2));
+  //console.log(JSON.stringify(result, null, 2));
   return result.failure.reduce((total, result) => {
     messages.push(`Risk: ${result.attributes['risk-level']} \tReason: ${result.attributes.message}`);
     if (result.attributes['risk-level'] === 'EXTREME'){
