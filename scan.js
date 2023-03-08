@@ -9,7 +9,7 @@ const readDir = promisify(fs.readdir);
 const readOptions = { encoding: "utf8" }
 
 const computeFailures = (result, messages) => {
-  console.log(result);
+  //console.log(JSON.stringify( result,null,2));
   return result.failure.reduce((total, result) => {
     messages.push(`Risk: ${result.attributes['risk-level']} \tReason: ${result.attributes.message}`);
     if (result.attributes['risk-level'] === 'EXTREME'){
@@ -59,8 +59,7 @@ const scanTemplate = async (cc, templatePath, profileId, accountId) => {
   console.log("Scan template: (%s)", templatePath)
   const result = await cc.scanACloudFormationTemplateAndReturAsArrays(template, profileId, accountId);
   const messages = [];
-  const results = computeFailures(result, messages);
-  console.log(JSON.stringify(results,null,2))
+  const results = computeFailures(result, messages); 
   return {
       template: templatePath,
       detections: result.failure,
