@@ -28,6 +28,11 @@ inputs:
   templatesDirPath:
     description: "(Optional) Location of the directory of templates to be scanned, (e.g., templates). This ignores the value of 'templatePath' if supplied."
     required: false
+  cc_output_results:
+    description: "Cloud One Conformity output results flag"
+    required: true
+  
+  
 branding:
   icon: "check"
   color: "red"
