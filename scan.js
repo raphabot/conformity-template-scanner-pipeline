@@ -4,12 +4,17 @@
 const fs = require('fs');
 const { promisify } = require('util');
 const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 const CloudConformity = require("cloud-conformity");
 const readDir = promisify(fs.readdir);
 const readOptions = { encoding: "utf8" }
 
-const computeFailures = (result, messages) => {
-  console.log(JSON.stringify(result, null, 2));
+const RESULTS_FILE_PATH='results.json'
+
+const computeFailures = async (result, messages) => {
+  const resultAsString = JSON.stringify(result, null, 2)
+  console.log(resultAsString);
+  await writeFile(RESULTS_FILE_PATH, resultAsString);
   return result.failure.reduce((total, result) => {
     messages.push(`Risk: ${result.attributes['risk-level']} \tReason: ${result.attributes.message}`);
     if (result.attributes['risk-level'] === 'EXTREME'){
@@ -59,7 +64,7 @@ const scanTemplate = async (cc, templatePath, profileId, accountId) => {
   console.log("Scan template: (%s)", templatePath)
   const result = await cc.scanACloudFormationTemplateAndReturAsArrays(template, profileId, accountId);
   const messages = [];
-  const results = computeFailures(result, messages);
+  const results = await computeFailures(result, messages);
   return {
       template: templatePath,
       detections: result.failure,
@@ -86,7 +91,7 @@ const templatesDirPath = process.env.templatesDirPath;
 scan(templatePath, region, apikey, profileId, accountId, templatesDirPath)
   .then(value => {
     const results = Array.isArray(value) ? value : [value]
-    const COMPLIANT_MESSASGE = "Template passes configured checks."
+    const COMPLIANT_MESSAGE = "Template passes configured checks."
     const NON_COMPLIANT_MESSAGE = "Security and/or misconfiguration issue(s) found in template(s): "
     const nonCompliantTemplates = [];
     let isCompliant = true;
@@ -107,7 +112,7 @@ scan(templatePath, region, apikey, profileId, accountId, templatesDirPath)
     }
     return {
         status: isCompliant,
-        message: isCompliant ? COMPLIANT_MESSASGE : NON_COMPLIANT_MESSAGE + " [" + nonCompliantTemplates + "]"
+        message: isCompliant ? COMPLIANT_MESSAGE : NON_COMPLIANT_MESSAGE + " [" + nonCompliantTemplates + "]"
     };
   })
   .then(res => {

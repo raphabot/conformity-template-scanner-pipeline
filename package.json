@@ -1,7 +1,7 @@
 {
   "name": "conformity-template-scanner",
-  "version": "1.0.5",
-  "description": "Small tool to scan your cloudformation files for misconfigurations using Conformity.",
+  "version": "1.1.0",
+  "description": "Small tool to scan your cloudformation files for misconfigurations using Trend Cloud One Conformity.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"No test specified\""
